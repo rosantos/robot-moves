@@ -1,13 +1,18 @@
 package com.github.rosantos.robotmoves.entity;
 
+/**
+ * @author Robson Ortega dos Santos
+ * Coordenadas, onde apenas são permitidos valores positivos para X e Y  
+ *
+ */
 public class Coordinate {
 
   protected int x = 0;
   protected int y = 0;
 
   public Coordinate(int x, int y) {
-    this.x = x;
-    this.y = y;
+    setX(x);
+    setY(y);
   }
 
   public int getX() {

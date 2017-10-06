@@ -1,21 +1,31 @@
 package com.github.rosantos.robotmoves.entity;
 
+/**
+ * @author Robson Ortega dos Santos
+ *
+ *         Movimento válido a ser executado pelo Robo, o mesmo possui o movimento e o numero de
+ *         vezes que deve executar o mesmo
+ */
 public class Movement {
-  private EnumMovement axisMovement;
-  
+  private EnumMovement enumMovement;
+
   private int steps = 0;
-  
-  public Movement(EnumMovement axisMovement, int steps) {
-    this.axisMovement = axisMovement;
+
+  /**
+   * @param enumMovement Tipo de Movimento
+   * @param steps Numero de passos do Movimento
+   */
+  public Movement(EnumMovement enumMovement, int steps) {
+    this.enumMovement = enumMovement;
     this.steps = steps;
   }
 
-  public EnumMovement getAxisMovement() {
-    return axisMovement;
+  public EnumMovement getEnumMovement() {
+    return enumMovement;
   }
 
-  public void setAxisMovement(EnumMovement axisMovement) {
-    this.axisMovement = axisMovement;
+  public void setAxisMovement(EnumMovement enumMovement) {
+    this.enumMovement = enumMovement;
   }
 
   public int getSteps() {
@@ -30,7 +40,7 @@ public class Movement {
   public int hashCode() {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ((axisMovement == null) ? 0 : axisMovement.hashCode());
+    result = prime * result + ((enumMovement == null) ? 0 : enumMovement.hashCode());
     result = prime * result + steps;
     return result;
   }
@@ -44,13 +54,13 @@ public class Movement {
     if (getClass() != obj.getClass())
       return false;
     Movement other = (Movement) obj;
-    if (axisMovement != other.axisMovement)
+    if (enumMovement != other.enumMovement)
       return false;
     if (steps != other.steps)
       return false;
     return true;
   }
 
-  
-  
+
+
 }

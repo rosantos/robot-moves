@@ -1,11 +1,19 @@
 package com.github.rosantos.robotmoves;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
 import com.github.rosantos.robotmoves.controller.RobotMoves;
 import com.github.rosantos.robotmoves.entity.EnumDirection;
 import com.github.rosantos.robotmoves.entity.EnumMovement;
@@ -17,6 +25,17 @@ import com.github.rosantos.robotmoves.util.MovementsUtil;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class RobotMovesApplicationTests {
+
+  @Autowired
+  private WebApplicationContext context;
+
+  private MockMvc mvc;
+
+
+  @Before
+  public void setup() throws Exception {
+    mvc = MockMvcBuilders.webAppContextSetup(context).build();
+  }
 
   @Test
   public void contextLoads() {}
@@ -98,14 +117,12 @@ public class RobotMovesApplicationTests {
 
   @Test
   public void checkReverseRight() {
-    Assert.assertEquals(EnumMovement.LEFT,
-        EnumMovement.getInverseAxisMovement(EnumMovement.RIGHT));
+    Assert.assertEquals(EnumMovement.LEFT, EnumMovement.getInverseAxisMovement(EnumMovement.RIGHT));
   }
 
   @Test
   public void checkReverseLeft() {
-    Assert.assertEquals(EnumMovement.RIGHT,
-        EnumMovement.getInverseAxisMovement(EnumMovement.LEFT));
+    Assert.assertEquals(EnumMovement.RIGHT, EnumMovement.getInverseAxisMovement(EnumMovement.LEFT));
   }
 
   @Test
@@ -118,48 +135,45 @@ public class RobotMovesApplicationTests {
   @Test
   public void moveToForward3Left2() {
     List<Movement> movements = MovementsUtil.convertStringToMovements("MRLMMLRLMLRM");
-    Movement[] expecteds = {new Movement(EnumMovement.MOVE, 3),
-        new Movement(EnumMovement.LEFT, 1), new Movement(EnumMovement.MOVE, 2)};
+    Movement[] expecteds = {new Movement(EnumMovement.MOVE, 3), new Movement(EnumMovement.LEFT, 1),
+        new Movement(EnumMovement.MOVE, 2)};
     Assert.assertArrayEquals(expecteds, movements.toArray());
   }
 
   @Test
   public void moveToForward3Right2() {
     List<Movement> movements = MovementsUtil.convertStringToMovements("MRLMMRRLMLRM");
-    Movement[] expecteds = {new Movement(EnumMovement.MOVE, 3),
-        new Movement(EnumMovement.RIGHT, 1), new Movement(EnumMovement.MOVE, 2)};
+    Movement[] expecteds = {new Movement(EnumMovement.MOVE, 3), new Movement(EnumMovement.RIGHT, 1),
+        new Movement(EnumMovement.MOVE, 2)};
     Assert.assertArrayEquals(expecteds, movements.toArray());
   }
-  
+
   @Test
   public void invalidCommands() {
     try {
-      MovementsUtil.convertStringToMovements("MRLA");      
+      MovementsUtil.convertStringToMovements("MRLA");
     } catch (IllegalArgumentException e) {
       Assert.assertTrue(true);
     }
   }
-  
+
   /** Testes do descritivo do problema **/
-  
+
   /**
-   * Movimento com rotações para direita: 
-   * Entrada: curl -s --request POST http://localhost:8080/rest/mars/MMRMMRMM
-   * Saída esperada: (2, 0, S)
+   * Movimento com rotações para direita: Entrada: curl -s --request POST
+   * http://localhost:8080/rest/mars/MMRMMRMM Saída esperada: (2, 0, S)
    */
-  @Test 
+  @Test
   public void movimentoComRotacoesParaDireita() {
     RobotMoves robotMoves = new RobotMoves();
     String expected = "(2, 0, S)";
     Assert.assertEquals(expected, robotMoves.execute("MMRMMRMM").toString());
   }
-  
+
   /**
-   * Movimento para esquerda:
-   * Entrada: curl -s --request POST http://localhost:8080/rest/mars/MML
-   * Saída esperada: (0, 2, W)
+   * Movimento para esquerda: Entrada: MML Saída esperada: (0, 2, W)
    */
-  @Test 
+  @Test
   public void movimentoParaEsquerda() {
     RobotMoves robotMoves = new RobotMoves();
     String expected = "(0, 2, W)";
@@ -167,45 +181,112 @@ public class RobotMovesApplicationTests {
   }
 
   /**
-   * Repetição da requisição com movimento para esquerda:
-   * Entrada: curl -s --request POST http://localhost:8080/rest/mars/MML
-   * Saída esperada: (0, 2, W)
+   * Repetição da requisição com movimento para esquerda: Entrada: MML Saída esperada: (0, 2, W)
    */
-  @Test 
+  @Test
   public void repeticaoMovimentoParaEsquerda() {
     RobotMoves robotMoves = new RobotMoves();
     String expected = "(0, 2, W)";
     Assert.assertEquals(expected, robotMoves.execute("MML").toString());
   }
-  
+
   /**
-   * Comando inválido:
-   * Entrada: curl -s --request POST http://localhost:8080/rest/mars/AAA
-   * Saída esperada: 400 Bad Request (IllegalArgumentException)
+   * Comando inválido: Entrada: AAA Saída esperada: 400 Bad Request (IllegalArgumentException)
    */
-  @Test 
-  public void ComandoInvalido() {
+  @Test
+  public void comandoInvalido() {
     try {
-    RobotMoves robotMoves = new RobotMoves();
-    robotMoves.execute("AAA");
+      RobotMoves robotMoves = new RobotMoves();
+      robotMoves.execute("AAA");
     } catch (IllegalArgumentException e) {
       Assert.assertTrue(true);
     }
   }
-  
+
   /**
-   * Posição inválida:
-   * Entrada curl -s --request POST http://localhost:8080/rest/mars/MMMMMMMMMMMMMMMMMMMMMMMM
-   * Saída esperada: 400 Bad Request (IllegalArgumentException)
+   * Posição inválida: Entrada: MMMMMMMMMMMMMMMMMMMMMMMM Saída esperada: 400 Bad Request
+   * (IllegalArgumentException)
    */
-  @Test 
-  public void PosicaoInvalida() {
+  @Test
+  public void posicaoInvalida() {
     try {
-    RobotMoves robotMoves = new RobotMoves();
-    robotMoves.execute("MMMMMMMMMMMMMMMMMMMMMMMM");
+      RobotMoves robotMoves = new RobotMoves();
+      robotMoves.execute("MMMMMMMMMMMMMMMMMMMMMMMM");
     } catch (IllegalArgumentException e) {
       Assert.assertTrue(true);
     }
   }
-  
+
+  /** Testes do descritivo do problema, chamando o Servico **/
+
+  /**
+   * Movimento com rotações para direita: Entrada: MMRMMRMM Saída esperada: (2, 0, S)
+   * @throws Exception 
+   * @throws UnsupportedEncodingException 
+   */
+  @Test
+  public void movimentoComRotacoesParaDireitaMVC() throws UnsupportedEncodingException, Exception {
+    String expected = "(2, 0, S)";
+    Assert.assertEquals(expected,
+        mvc.perform(MockMvcRequestBuilders.post("/rest/mars/MMRMMRMM"))
+            .andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse()
+            .getContentAsString());
+  }
+
+  /**
+   * Movimento para esquerda: Entrada: curl -s --request POST http://localhost:8080/rest/mars/MML
+   * Saída esperada: (0, 2, W)
+   * @throws Exception 
+   * @throws UnsupportedEncodingException 
+   */
+  @Test
+  public void movimentoParaEsquerdaMVC() throws UnsupportedEncodingException, Exception {
+    String expected = "(0, 2, W)";
+    Assert.assertEquals(expected,
+        mvc.perform(MockMvcRequestBuilders.post("/rest/mars/MML"))
+            .andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse()
+            .getContentAsString());
+  }
+
+  /**
+   * Repetição da requisição com movimento para esquerda: Entrada: curl -s --request POST
+   * http://localhost:8080/rest/mars/MML Saída esperada: (0, 2, W)
+   * 
+   * @throws Exception
+   * @throws UnsupportedEncodingException
+   */
+  @Test
+  public void repeticaoMovimentoParaEsquerdaMVC() throws UnsupportedEncodingException, Exception {
+    String expected = "(0, 2, W)";
+    Assert.assertEquals(expected,
+        mvc.perform(MockMvcRequestBuilders.post("/rest/mars/MML"))
+            .andExpect(MockMvcResultMatchers.status().isOk()).andReturn().getResponse()
+            .getContentAsString());
+  }
+
+  /**
+   * Comando inválido: Entrada: curl -s --request POST http://localhost:8080/rest/mars/AAA Saída
+   * esperada: 400 Bad Request (IllegalArgumentException)
+   * 
+   * @throws Exception
+   */
+  @Test
+  public void comandoInvalidoMVC() throws Exception {
+    mvc.perform(MockMvcRequestBuilders.post("/rest/mars/AAA"))
+        .andExpect(MockMvcResultMatchers.status().isBadRequest());
+  }
+
+  /**
+   * Posição inválida: Entrada curl -s --request POST
+   * http://localhost:8080/rest/mars/MMMMMMMMMMMMMMMMMMMMMMMM Saída esperada: 400 Bad Request
+   * (IllegalArgumentException)
+   * 
+   * @throws Exception
+   */
+  @Test
+  public void posicaoInvalidaMVC() throws Exception {
+    mvc.perform(MockMvcRequestBuilders.post("/rest/mars/MMMMMMMMMMMMMMMMMMMMMMMM"))
+        .andExpect(MockMvcResultMatchers.status().isBadRequest());
+  }
+
 }
