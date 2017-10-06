@@ -8,8 +8,10 @@ import com.github.rosantos.robotmoves.entity.Terrain;
 import com.github.rosantos.robotmoves.util.MovementsUtil;
 
 /**
- * @author Robson Ortega dos Santos Classe de Controle de Movimentos do Robo em marte, a mesma
- *         controla a posição do Robo no Terreno em que foi vinculado o robo
+ * @author Robson Ortega dos Santos
+ * 
+ *         Controle de Movimentos do Robo em marte, a mesma controla a posição do Robo no Terreno em
+ *         que foi vinculado o robo
  *
  */
 public class RobotMoves {
@@ -19,11 +21,11 @@ public class RobotMoves {
   private Terrain terrain = new Terrain();
 
   /**
-   * Movimenta o Robô sobre a Terreno configurado, caso o mesmo ultrapasse o limite do terreno
-   * retorna {@link IllegalArgumentException}
+   * Movimenta o Robô sobre a Terreno configurado
    * 
    * @param steps Numero de Passos que o robo irá se deslocar
    * @return {@link Position} Posição e Direção do robô após seu deslocamento
+   * @exception IllegalArgumentException caso o mesmo ultrapasse o limite do terreno
    */
   private Position move(int steps) {
     switch (position.getDirection()) {
@@ -47,13 +49,12 @@ public class RobotMoves {
   }
 
   /**
-   * Movimenta e Rotaciona o robo pelos comandos enviados pelos engenheiros. Caso os comandos são
-   * sejam interpretados ou o movimento ultrapasse o limite do terreno retorna * Movimenta o Robô
-   * sobre a Terreno configurado, caso o mesmo ultrapasse o limite do terreno
-   * {@link IllegalArgumentException}
+   * Movimenta e Rotaciona o robo pelos comandos enviados pelos engenheiros.
    * 
    * @param commands Sequencia de Movimentos e Rotações que o Robo irá executar
    * @return {@link Position} Posição após o deslocamento do robo
+   * @exception IllegalArgumentException Caso os comandos não sejam interpretados ou o movimento
+   *            ultrapasse o limite do terreno retorna Movimenta o Robô
    */
   public Position execute(String commands) {
     List<Movement> movements = MovementsUtil.convertStringToMovements(commands);

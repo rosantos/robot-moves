@@ -2,7 +2,8 @@ package com.github.rosantos.robotmoves.entity;
 
 /**
  * @author Robson Ortega dos Santos
- * Coordenadas, onde apenas são permitidos valores positivos para X e Y  
+ * 
+ *         Coordenadas, onde apenas são permitidos valores positivos para X e Y
  *
  */
 public class Coordinate {

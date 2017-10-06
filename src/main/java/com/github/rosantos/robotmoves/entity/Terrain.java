@@ -21,11 +21,11 @@ public class Terrain extends Coordinate {
   }
 
   /**
-   * Valida se a posição é válida de acordo com os limites do Terreno, em caso de falha retorn
-   * {@link IllegalArgumentException} devido as cordenadas enviadas pelo engenheiro da NASA não são
-   * válidas neste terreno
+   * Valida se a posição é válida de acordo com os limites do Terreno
    * 
    * @param position Posição a qual o Robo se deslocaria
+   * @exception IllegalArgumentException devido as cordenadas enviadas pelo engenheiro da NASA não
+   *            sendo válidas neste terreno
    */
   public void validPosition(Coordinate position) {
     Objects.requireNonNull(position, "Posicao nao pode ser nula");

@@ -1,8 +1,9 @@
 package com.github.rosantos.robotmoves.entity;
 
 /**
- * @author Robson Ortega dos Santos Posicao do Robo, possui as coordenadas e a direção que ele se
- *         encontra
+ * @author Robson Ortega dos Santos
+ * 
+ *         Posicao do Robo, possui as coordenadas e a direção que ele se encontra
  */
 public class Position {
 

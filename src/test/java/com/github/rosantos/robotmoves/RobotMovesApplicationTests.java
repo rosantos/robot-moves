@@ -221,8 +221,9 @@ public class RobotMovesApplicationTests {
 
   /**
    * Movimento com rotações para direita: Entrada: MMRMMRMM Saída esperada: (2, 0, S)
-   * @throws Exception 
-   * @throws UnsupportedEncodingException 
+   * 
+   * @throws Exception
+   * @throws UnsupportedEncodingException
    */
   @Test
   public void movimentoComRotacoesParaDireitaMVC() throws UnsupportedEncodingException, Exception {
@@ -236,8 +237,9 @@ public class RobotMovesApplicationTests {
   /**
    * Movimento para esquerda: Entrada: curl -s --request POST http://localhost:8080/rest/mars/MML
    * Saída esperada: (0, 2, W)
-   * @throws Exception 
-   * @throws UnsupportedEncodingException 
+   * 
+   * @throws Exception
+   * @throws UnsupportedEncodingException
    */
   @Test
   public void movimentoParaEsquerdaMVC() throws UnsupportedEncodingException, Exception {
