@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class RobotMovesApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(RobotMovesApplication.class, args);
-	}
+  public static void main(String[] args) {
+    SpringApplication.run(RobotMovesApplication.class, args);
+  }
 }
